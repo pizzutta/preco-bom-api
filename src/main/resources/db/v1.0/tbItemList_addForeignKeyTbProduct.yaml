@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: tbItemList_addForeignKeyTbProduct
+      author: Vitória
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: product_id
+            baseTableName: tb_item_list
+            constraintName: FK_TB_ITEM_LIST_ON_PRODUCT
+            referencedColumnNames: id
+            referencedTableName: tb_product

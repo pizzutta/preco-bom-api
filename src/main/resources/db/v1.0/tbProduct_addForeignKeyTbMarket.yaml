@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: tbProduct_addForeignKeyTbMarket
+      author: Vitória
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+          - addForeignKeyConstraint:
+                baseColumnNames: market_id
+                baseTableName: tb_product
+                constraintName: FK_TB_PRODUCT_ON_MARKET
+                referencedColumnNames: id
+                referencedTableName: tb_market

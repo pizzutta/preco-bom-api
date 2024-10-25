@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: tbGroceryList_addForeignKeyTbUser
+      author: Vitória
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: tb_grocery_list
+            constraintName: FK_TB_GROCERY_LIST_ON_USER
+            referencedColumnNames: id
+            referencedTableName: tb_user

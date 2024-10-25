@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: createTable_tbItemList
+      author: Vitória
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: tb_item_list
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tb_item_list
+              - column:
+                  name: product_id
+                  type: BIGINT
+              - column:
+                  name: quantity
+                  type: INT
+              - column:
+                  name: checked
+                  type: BOOLEAN
+              - column:
+                  name: grocery_list_id
+                  type: BIGINT

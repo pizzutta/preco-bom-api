@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: createTable_tbGroceryList
+      author: Vitória
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: tb_grocery_list
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tb_grocery_list
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: user_id
+                  type: BIGINT

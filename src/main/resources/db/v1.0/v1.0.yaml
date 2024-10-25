@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: db/v1.0/createTable_tbGroceryList.yaml
+  - include:
+      file: db/v1.0/createTable_tbItemList.yaml
+  - include:
+      file: db/v1.0/createTable_tbMarket.yaml
+  - include:
+      file: db/v1.0/createTable_tbProduct.yaml
+  - include:
+      file: db/v1.0/createTable_tbUser.yaml
+  - include:
+      file: db/v1.0/tbGroceryList_addForeignKeyTbUser.yaml
+  - include:
+      file: db/v1.0/tbItemList_addForeignKeyTbGroceryList.yaml
+  - include:
+      file: db/v1.0/tbItemList_addForeignKeyTbProduct.yaml
+  - include:
+      file: db/v1.0/tbProduct_addForeignKeyTbMarket.yaml
