@@ -1,23 +1,29 @@
 package com.pizzutti.precobom.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "tb_grocery_list")
+@Schema(description = "A grocery list object contains information about a grocery list created by some user in the app")
 public class GroceryList {
 
     @Id
     @GeneratedValue
+    @Schema(description = "The grocery list ID", example = "1")
     private Long id;
     @Column
+    @Schema(description = "The grocery list's name", example = "Weekly Essentials")
     private String name;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Schema(description = "The user that created and maintains the grocery list")
     private User user;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "grocery_list_id")
+    @Schema(description = "The items contained in the grocery list")
     private List<ItemList> items = new ArrayList<>();
 
     public Long getId() {
