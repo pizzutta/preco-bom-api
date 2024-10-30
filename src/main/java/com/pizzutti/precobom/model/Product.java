@@ -1,25 +1,34 @@
 package com.pizzutti.precobom.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 @Entity(name = "tb_product")
+@Schema(description = "A product object contains information about a product registered by some market in the app")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(description = "The product ID", example = "1")
     private Long id;
     @Column
+    @Schema(description = "The product's name", example = "Grape Tomatoes")
     private String name;
     @Column
+    @Schema(description = "The product's price determined by the market", example = "2.25")
     private Double price;
     @Column(name = "measuring_unit")
+    @Schema(description = "The unit used to measure the product", example = "lbs")
     private String measuringUnit;
     @Column
+    @Schema(description = "An URL or a path to an image provided by the market to represent the product",
+            example = "https://mysite.com/images/my-product.jpg")
     private String image;
     @ManyToOne
     @JoinColumn(name = "market_id")
     @JsonManagedReference
+    @Schema(description = "The market that registered that product")
     private Market market;
 
     public Long getId() {
