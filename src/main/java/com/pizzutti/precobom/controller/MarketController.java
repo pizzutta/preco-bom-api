@@ -40,7 +40,8 @@ public class MarketController {
 
         service.save(market);
 
-        return ResponseEntity.created(URI.create("/market/" + market.getId())).build();
+        URI uri = URI.create("/market/" + market.getId());
+        return ResponseEntity.created(uri).body(market);
     }
 
     @PutMapping

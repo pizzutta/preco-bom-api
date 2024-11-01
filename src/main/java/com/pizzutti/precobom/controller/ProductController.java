@@ -71,7 +71,8 @@ public class ProductController {
 
         service.save(product);
 
-        return ResponseEntity.created(URI.create("/product/" + product.getId())).build();
+        URI uri = URI.create("/product/" + product.getId());
+        return ResponseEntity.created(uri).body(product);
     }
 
     @PutMapping

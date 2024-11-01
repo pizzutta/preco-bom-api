@@ -43,7 +43,8 @@ public class GroceryListController {
 
         service.save(groceryList);
 
-        return ResponseEntity.created(URI.create("/grocery-list/" + groceryList.getId())).build();
+        URI uri = URI.create("/grocery-list/" + groceryList.getId());
+        return ResponseEntity.created(uri).body(groceryList);
     }
 
     @PutMapping
