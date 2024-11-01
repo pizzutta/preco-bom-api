@@ -13,7 +13,7 @@ import static io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP;
         info = @Info(
                 title = "Preço Bom API",
                 version = "1.0",
-                description = "Documentação da API da aplicação Preço Bom",
+                description = "API documentation for Preço Bom application",
                 contact = @Contact(name = "Vitória", email = "pizzutti.v@gmail.com")
         ),
         security = {
