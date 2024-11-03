@@ -1,8 +1,10 @@
 package com.pizzutti.precobom.controller;
 
 import com.pizzutti.precobom.dto.MarketRegisterDTO;
+import com.pizzutti.precobom.dto.MarketUpdateDTO;
 import com.pizzutti.precobom.model.Market;
 import com.pizzutti.precobom.service.MarketService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +47,14 @@ public class MarketController {
     }
 
     @PutMapping
-    public ResponseEntity updateMarket(@RequestBody Market market) {
+    public ResponseEntity updateMarket(@RequestBody @Valid MarketUpdateDTO data) {
+        Market market = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
+        market.setName(data.name());
+        market.setAddress(data.address());
+        market.setImage(data.image());
+
         service.save(market);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(market);
     }
 
     @DeleteMapping

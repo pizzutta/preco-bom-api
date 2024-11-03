@@ -1,10 +1,12 @@
 package com.pizzutti.precobom.controller;
 
 import com.pizzutti.precobom.dto.GroceryListRegisterDTO;
+import com.pizzutti.precobom.dto.GroceryListUpdateDTO;
 import com.pizzutti.precobom.dto.IdDTO;
 import com.pizzutti.precobom.model.GroceryList;
 import com.pizzutti.precobom.service.GroceryListService;
 import com.pizzutti.precobom.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +50,12 @@ public class GroceryListController {
     }
 
     @PutMapping
-    public ResponseEntity updateGroceryList(@RequestBody GroceryList groceryList) {
+    public ResponseEntity updateGroceryList(@RequestBody @Valid GroceryListUpdateDTO data) {
+        GroceryList groceryList = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
+        groceryList.setName(data.name());
+
         service.save(groceryList);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(groceryList);
     }
 
     @DeleteMapping

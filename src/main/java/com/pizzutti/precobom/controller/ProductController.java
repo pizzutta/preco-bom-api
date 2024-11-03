@@ -3,9 +3,11 @@ package com.pizzutti.precobom.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pizzutti.precobom.dto.ProductRegisterDTO;
+import com.pizzutti.precobom.dto.ProductUpdateDTO;
 import com.pizzutti.precobom.model.Product;
 import com.pizzutti.precobom.service.MarketService;
 import com.pizzutti.precobom.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -76,9 +78,16 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity updateProduct(@RequestBody Product product) {
+    public ResponseEntity updateProduct(@RequestBody @Valid ProductUpdateDTO data) {
+        Product product = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
+        product.setName(data.name());
+        product.setPrice(data.price());
+        product.setMeasuringUnit(data.measuringUnit());
+        product.setImage(data.image());
+        product.setMarket(marketService.findById(data.marketId()).get());
+
         service.save(product);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(product);
     }
 
     @DeleteMapping

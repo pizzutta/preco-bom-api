@@ -8,6 +8,7 @@ import com.pizzutti.precobom.model.ItemList;
 import com.pizzutti.precobom.service.GroceryListService;
 import com.pizzutti.precobom.service.ItemListService;
 import com.pizzutti.precobom.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,11 +45,12 @@ public class ItemListController {
 
     @PutMapping
     public ResponseEntity updateItemList(@RequestBody ItemListUpdateDTO data) {
-        ItemList itemList = service.findById(data.id()).get();
-        itemList.setQuantity(data.itemList().quantity());
-        itemList.setChecked(data.itemList().checked());
+        ItemList itemList = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
+        itemList.setQuantity(data.quantity());
+        itemList.setChecked(data.checked());
+
         service.save(itemList);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(itemList);
     }
 
     @DeleteMapping
