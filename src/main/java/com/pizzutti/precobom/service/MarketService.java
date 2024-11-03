@@ -29,7 +29,7 @@ public class MarketService {
     }
 
     @Transactional
-    public void delete(Market product) {
-        repository.delete(product);
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }

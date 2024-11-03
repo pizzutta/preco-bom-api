@@ -1,5 +1,6 @@
 package com.pizzutti.precobom.controller;
 
+import com.pizzutti.precobom.dto.IdDTO;
 import com.pizzutti.precobom.dto.MarketRegisterDTO;
 import com.pizzutti.precobom.dto.MarketUpdateDTO;
 import com.pizzutti.precobom.model.Market;
@@ -58,8 +59,8 @@ public class MarketController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteMarket(@RequestBody Market market) {
-        service.delete(market);
-        return ResponseEntity.ok().build();
+    public ResponseEntity deleteMarket(@RequestBody @Valid IdDTO data) {
+        service.deleteById(data.id());
+        return ResponseEntity.noContent().build();
     }
 }

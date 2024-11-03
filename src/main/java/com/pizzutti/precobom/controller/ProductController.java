@@ -2,6 +2,7 @@ package com.pizzutti.precobom.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pizzutti.precobom.dto.IdDTO;
 import com.pizzutti.precobom.dto.ProductRegisterDTO;
 import com.pizzutti.precobom.dto.ProductUpdateDTO;
 import com.pizzutti.precobom.model.Product;
@@ -91,8 +92,8 @@ public class ProductController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteProductById(@RequestBody Long id) {
-        service.deleteById(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity deleteProductById(@RequestBody @Valid IdDTO data) {
+        service.deleteById(data.id());
+        return ResponseEntity.noContent().build();
     }
 }

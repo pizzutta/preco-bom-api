@@ -59,8 +59,8 @@ public class GroceryListController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteGroceryListById(@RequestBody IdDTO data) {
+    public ResponseEntity deleteGroceryListById(@RequestBody @Valid IdDTO data) {
         service.deleteById(data.id());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
