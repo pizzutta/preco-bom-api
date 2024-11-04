@@ -42,7 +42,7 @@ public class ItemListController {
             @ApiResponse(responseCode = "400", description = "Request content is invalid", content = @Content),
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
     })
-    public ResponseEntity save(@RequestBody @Valid ItemListRegisterDTO data) {
+    public ResponseEntity<ItemList> save(@RequestBody @Valid ItemListRegisterDTO data) {
         ItemList itemList = new ItemList();
         itemList.setProduct(productService.findById(data.productId()).get());
         itemList.setQuantity(data.quantity());
@@ -67,7 +67,7 @@ public class ItemListController {
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
             @ApiResponse(responseCode = "404", description = "Item list not found", content = @Content)
     })
-    public ResponseEntity update(@RequestBody ItemListUpdateDTO data) {
+    public ResponseEntity<ItemList> update(@RequestBody ItemListUpdateDTO data) {
         ItemList itemList = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
         itemList.setQuantity(data.quantity());
         itemList.setChecked(data.checked());
@@ -83,7 +83,7 @@ public class ItemListController {
             @ApiResponse(responseCode = "400", description = "Request content is invalid", content = @Content),
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
     })
-    public ResponseEntity deleteById(@RequestBody @Valid IdDTO data) {
+    public ResponseEntity<Void> deleteById(@RequestBody @Valid IdDTO data) {
         service.deleteById(data.id());
         return ResponseEntity.noContent().build();
     }
