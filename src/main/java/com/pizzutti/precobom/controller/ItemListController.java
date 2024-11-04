@@ -28,7 +28,7 @@ public class ItemListController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity saveItemList(@RequestBody @Valid ItemListRegisterDTO data) {
+    public ResponseEntity save(@RequestBody @Valid ItemListRegisterDTO data) {
         ItemList itemList = new ItemList();
         itemList.setProduct(productService.findById(data.productId()).get());
         itemList.setQuantity(data.quantity());
@@ -44,7 +44,7 @@ public class ItemListController {
     }
 
     @PutMapping
-    public ResponseEntity updateItemList(@RequestBody ItemListUpdateDTO data) {
+    public ResponseEntity update(@RequestBody ItemListUpdateDTO data) {
         ItemList itemList = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
         itemList.setQuantity(data.quantity());
         itemList.setChecked(data.checked());
@@ -54,7 +54,7 @@ public class ItemListController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteGroceryListById(@RequestBody @Valid IdDTO data) {
+    public ResponseEntity deleteById(@RequestBody @Valid IdDTO data) {
         service.deleteById(data.id());
         return ResponseEntity.noContent().build();
     }

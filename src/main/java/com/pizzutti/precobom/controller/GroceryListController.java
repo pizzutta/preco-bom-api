@@ -26,19 +26,19 @@ public class GroceryListController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity getGroceryList(@PathVariable(value = "id") Long id) {
-        Optional<GroceryList> product = service.findById(id);
-        return (product.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(product.get());
+    public ResponseEntity getById(@PathVariable(value = "id") Long id) {
+        Optional<GroceryList> groceryList = service.findById(id);
+        return (groceryList.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(groceryList.get());
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity getGroceryListsByUser(@PathVariable(value = "userId") Long userId) {
+    public ResponseEntity getByUser(@PathVariable(value = "userId") Long userId) {
         List<GroceryList> groceryLists = service.findByUserId(userId);
         return (groceryLists.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(groceryLists);
     }
 
     @PostMapping
-    public ResponseEntity saveGroceryList(@RequestBody @Valid GroceryListRegisterDTO data) {
+    public ResponseEntity save(@RequestBody @Valid GroceryListRegisterDTO data) {
         GroceryList groceryList = new GroceryList();
         groceryList.setName(data.name());
         groceryList.setUser(userService.findById(data.userId()).get());
@@ -50,7 +50,7 @@ public class GroceryListController {
     }
 
     @PutMapping
-    public ResponseEntity updateGroceryList(@RequestBody @Valid GroceryListUpdateDTO data) {
+    public ResponseEntity update(@RequestBody @Valid GroceryListUpdateDTO data) {
         GroceryList groceryList = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
         groceryList.setName(data.name());
 
@@ -59,7 +59,7 @@ public class GroceryListController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteGroceryListById(@RequestBody @Valid IdDTO data) {
+    public ResponseEntity deleteById(@RequestBody @Valid IdDTO data) {
         service.deleteById(data.id());
         return ResponseEntity.noContent().build();
     }

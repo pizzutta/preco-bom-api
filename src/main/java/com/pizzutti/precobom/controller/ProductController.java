@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +21,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/product")
@@ -33,13 +34,13 @@ public class ProductController {
     private MarketService marketService;
 
     @GetMapping
-    public ResponseEntity getAllProducts() {
+    public ResponseEntity getAll() {
         List<Product> products = service.findAll();
         return (products.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(products);
     }
 
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getSortedProducts(@RequestParam(name = "order") String json) {
+    @GetMapping(consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity getSorted(@RequestParam(name = "order") String json) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, String> map = mapper.readValue(json, Map.class);
@@ -52,19 +53,19 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getProduct(@PathVariable(value = "id") Long id) {
+    public ResponseEntity getById(@PathVariable(value = "id") Long id) {
         Optional<Product> product = service.findById(id);
         return (product.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(product.get());
     }
 
     @GetMapping("/market/{marketId}")
-    public ResponseEntity getProductsByMarketId(@PathVariable(value = "marketId") Long marketId) {
+    public ResponseEntity getByMarketId(@PathVariable(value = "marketId") Long marketId) {
         List<Product> products = service.findByMarketId(marketId);
         return (products.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(products);
     }
 
     @PostMapping
-    public ResponseEntity saveProduct(@RequestBody @Valid ProductRegisterDTO data) {
+    public ResponseEntity save(@RequestBody @Valid ProductRegisterDTO data) {
         Product product = new Product();
         product.setName(data.name());
         product.setPrice(data.price());
@@ -79,7 +80,7 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity updateProduct(@RequestBody @Valid ProductUpdateDTO data) {
+    public ResponseEntity update(@RequestBody @Valid ProductUpdateDTO data) {
         Product product = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
         product.setName(data.name());
         product.setPrice(data.price());
@@ -92,7 +93,7 @@ public class ProductController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteProductById(@RequestBody @Valid IdDTO data) {
+    public ResponseEntity deleteById(@RequestBody @Valid IdDTO data) {
         service.deleteById(data.id());
         return ResponseEntity.noContent().build();
     }
