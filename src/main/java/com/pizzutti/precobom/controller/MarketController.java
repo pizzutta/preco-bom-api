@@ -23,19 +23,19 @@ public class MarketController {
     private MarketService service;
 
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<List<Market>> getAll() {
         List<Market> markets = service.findAll();
         return (markets.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(markets);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Market> getById(@PathVariable(value = "id") Long id) {
         Optional<Market> market = service.findById(id);
-        return (market.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(market.get());
+        return market.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestBody @Valid MarketRegisterDTO data) {
+    public ResponseEntity<Market> save(@RequestBody @Valid MarketRegisterDTO data) {
         Market market = new Market();
         market.setName(data.name());
         market.setAddress(data.address());
@@ -48,7 +48,7 @@ public class MarketController {
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody @Valid MarketUpdateDTO data) {
+    public ResponseEntity<Market> update(@RequestBody @Valid MarketUpdateDTO data) {
         Market market = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
         market.setName(data.name());
         market.setAddress(data.address());
@@ -59,7 +59,7 @@ public class MarketController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteById(@RequestBody @Valid IdDTO data) {
+    public ResponseEntity<Market> deleteById(@RequestBody @Valid IdDTO data) {
         service.deleteById(data.id());
         return ResponseEntity.noContent().build();
     }
