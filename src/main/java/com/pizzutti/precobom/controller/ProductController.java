@@ -79,7 +79,7 @@ public class ProductController {
     })
     public ResponseEntity<Product> getById(@Parameter(description = "The product ID", example = "1") @PathVariable(value = "id") Long id) {
         Optional<Product> product = service.findById(id);
-        return (product.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(product.get());
+        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/market/{marketId}")

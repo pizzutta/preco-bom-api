@@ -46,7 +46,7 @@ public class GroceryListController {
     public ResponseEntity<GroceryList> getById(@Parameter(description = "The grocery list ID", example = "1") @PathVariable(value = "id"
     ) Long id) {
         Optional<GroceryList> groceryList = service.findById(id);
-        return (groceryList.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(groceryList.get());
+        return groceryList.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/user/{userId}")
