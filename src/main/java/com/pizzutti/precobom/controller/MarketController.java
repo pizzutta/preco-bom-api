@@ -53,7 +53,7 @@ public class MarketController {
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
             @ApiResponse(responseCode = "404", description = "Market not found", content = @Content)
     })
-    public ResponseEntity<Market> getById(@Parameter(description = "The market ID") @PathVariable(value = "id") Long id) {
+    public ResponseEntity<Market> getById(@Parameter(description = "The market ID", example = "1") @PathVariable(value = "id") Long id) {
         Optional<Market> market = service.findById(id);
         return market.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
