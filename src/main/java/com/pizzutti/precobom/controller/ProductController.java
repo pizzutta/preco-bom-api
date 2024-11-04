@@ -8,6 +8,14 @@ import com.pizzutti.precobom.dto.ProductUpdateDTO;
 import com.pizzutti.precobom.model.Product;
 import com.pizzutti.precobom.service.MarketService;
 import com.pizzutti.precobom.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +34,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/product")
+@Tag(name = "Product")
 public class ProductController {
 
     @Autowired
@@ -34,6 +43,14 @@ public class ProductController {
     private MarketService marketService;
 
     @GetMapping
+    @Operation(description = "Gets all the products registered in the app")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Products found",
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(
+                            schema = @Schema(implementation = Product.class)))),
+            @ApiResponse(responseCode = "204", description = "No products were found", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
+    })
     public ResponseEntity getAll() {
         List<Product> products = service.findAll();
         return (products.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(products);
@@ -53,18 +70,41 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable(value = "id") Long id) {
+    @Operation(description = "Gets a product by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Product.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
+    })
+    public ResponseEntity getById(@Parameter(description = "The product ID", example = "1") @PathVariable(value = "id") Long id) {
         Optional<Product> product = service.findById(id);
         return (product.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(product.get());
     }
 
     @GetMapping("/market/{marketId}")
-    public ResponseEntity getByMarketId(@PathVariable(value = "marketId") Long marketId) {
+    @Operation(description = "Gets all the market products by the market ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Products found",
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(
+                            schema = @Schema(implementation = Product.class)))),
+            @ApiResponse(responseCode = "204", description = "No products were found", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
+    })
+    public ResponseEntity getByMarketId(@Parameter(description = "The market ID", example = "1") @PathVariable(value =
+            "marketId") Long marketId) {
         List<Product> products = service.findByMarketId(marketId);
         return (products.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(products);
     }
 
     @PostMapping
+    @Operation(description = "Creates a new product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Product created",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Product.class))),
+            @ApiResponse(responseCode = "400", description = "Request content is invalid", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
+    })
     public ResponseEntity save(@RequestBody @Valid ProductRegisterDTO data) {
         Product product = new Product();
         product.setName(data.name());
@@ -80,6 +120,14 @@ public class ProductController {
     }
 
     @PutMapping
+    @Operation(description = "Updates an existing product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product updated",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Product.class))),
+            @ApiResponse(responseCode = "400", description = "Request content is invalid", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
+    })
     public ResponseEntity update(@RequestBody @Valid ProductUpdateDTO data) {
         Product product = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
         product.setName(data.name());
@@ -93,6 +141,12 @@ public class ProductController {
     }
 
     @DeleteMapping
+    @Operation(description = "Deletes an existing product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Product deleted", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Request content is invalid", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
+    })
     public ResponseEntity deleteById(@RequestBody @Valid IdDTO data) {
         service.deleteById(data.id());
         return ResponseEntity.noContent().build();
