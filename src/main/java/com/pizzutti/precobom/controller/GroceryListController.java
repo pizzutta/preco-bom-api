@@ -43,7 +43,7 @@ public class GroceryListController {
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
             @ApiResponse(responseCode = "404", description = "Grocery list not found", content = @Content)
     })
-    public ResponseEntity getById(@Parameter(description = "The grocery list ID", example = "1") @PathVariable(value = "id"
+    public ResponseEntity<GroceryList> getById(@Parameter(description = "The grocery list ID", example = "1") @PathVariable(value = "id"
     ) Long id) {
         Optional<GroceryList> groceryList = service.findById(id);
         return (groceryList.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(groceryList.get());
@@ -58,7 +58,7 @@ public class GroceryListController {
             @ApiResponse(responseCode = "204", description = "No grocery lists were found", content = @Content),
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
     })
-    public ResponseEntity getByUser(@Parameter(description = "The user ID", example = "1") @PathVariable(value = "userId") Long userId) {
+    public ResponseEntity<List<GroceryList>> getByUser(@Parameter(description = "The user ID", example = "1") @PathVariable(value = "userId") Long userId) {
         List<GroceryList> groceryLists = service.findByUserId(userId);
         return (groceryLists.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(groceryLists);
     }
@@ -72,7 +72,7 @@ public class GroceryListController {
             @ApiResponse(responseCode = "400", description = "Request content is invalid", content = @Content),
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
     })
-    public ResponseEntity save(@RequestBody @Valid GroceryListRegisterDTO data) {
+    public ResponseEntity<GroceryList> save(@RequestBody @Valid GroceryListRegisterDTO data) {
         GroceryList groceryList = new GroceryList();
         groceryList.setName(data.name());
         groceryList.setUser(userService.findById(data.userId()).get());
@@ -93,7 +93,7 @@ public class GroceryListController {
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
             @ApiResponse(responseCode = "404", description = "Grocery list not found", content = @Content)
     })
-    public ResponseEntity update(@RequestBody @Valid GroceryListUpdateDTO data) {
+    public ResponseEntity<GroceryList> update(@RequestBody @Valid GroceryListUpdateDTO data) {
         GroceryList groceryList = service.findById(data.id()).orElseThrow(EntityNotFoundException::new);
         groceryList.setName(data.name());
 
@@ -108,7 +108,7 @@ public class GroceryListController {
             @ApiResponse(responseCode = "400", description = "Request content is invalid", content = @Content),
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
     })
-    public ResponseEntity deleteById(@RequestBody @Valid IdDTO data) {
+    public ResponseEntity<Void> deleteById(@RequestBody @Valid IdDTO data) {
         service.deleteById(data.id());
         return ResponseEntity.noContent().build();
     }
