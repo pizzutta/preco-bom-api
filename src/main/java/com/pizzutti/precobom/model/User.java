@@ -9,12 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity(name = "tb_user")
 @Schema(description = "An user object contains information about an user registered in the app")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Schema(description = "The user ID", example = "1")
     private Long id;
     @Column
@@ -63,7 +65,8 @@ public class User implements UserDetails {
     @Override
     @Schema(hidden = true)
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (this.role == UserRole.ADMIN) ? List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"))
+        return (this.role == UserRole.ADMIN) ? List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+                new SimpleGrantedAuthority("ROLE_USER"))
                 : List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 

@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity(name = "tb_grocery_list")
 @Schema(description = "A grocery list object contains information about a grocery list created by some user in the app")
 public class GroceryList {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Schema(description = "The grocery list ID", example = "1")
     private Long id;
     @Column

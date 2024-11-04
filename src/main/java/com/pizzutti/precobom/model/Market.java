@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity(name = "tb_market")
 @Schema(description = "A market object contains information about a market registered in the app")
 public class Market {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Schema(description = "The market ID", example = "1")
     private Long id;
     @Column

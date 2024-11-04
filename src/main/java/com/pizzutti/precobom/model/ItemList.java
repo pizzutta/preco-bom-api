@@ -3,12 +3,14 @@ package com.pizzutti.precobom.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity(name = "tb_item_list")
 @Schema(description = "An item list object contains information about an item of a grocery list in the app")
 public class ItemList {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Schema(description = "The item list ID", example = "1")
     private Long id;
     @ManyToOne
