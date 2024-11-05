@@ -1,5 +1,6 @@
 package com.pizzutti.precobom.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +24,7 @@ public class User implements UserDetails {
     @Schema(description = "The user's email", example = "my@email.com")
     private String email;
     @Column
+    @JsonIgnore
     @Schema(hidden = true)
     private String password;
     @Enumerated(EnumType.STRING)
@@ -63,6 +65,7 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     @Schema(hidden = true)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return (this.role == UserRole.ADMIN) ? List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
@@ -71,30 +74,35 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     @Schema(hidden = true)
     public String getUsername() {
         return email;
     }
 
     @Override
+    @JsonIgnore
     @Schema(hidden = true)
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     @Schema(hidden = true)
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     @Schema(hidden = true)
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     @Schema(hidden = true)
     public boolean isEnabled() {
         return true;
