@@ -134,7 +134,6 @@ public class ProductController {
         product.setPrice(data.price());
         product.setMeasuringUnit(data.measuringUnit());
         product.setImage(data.image());
-        product.setMarket(marketService.findById(data.marketId()).get());
 
         service.save(product);
         return ResponseEntity.ok(product);

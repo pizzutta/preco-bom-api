@@ -21,8 +21,6 @@ public record ProductUpdateDTO(
         @NotBlank
         @Schema(description = "An URL or a path to an image provided by the market to represent the product",
                 example = "https://mysite.com/images/my-product.jpg")
-        String image,
-        @NotNull
-        Long marketId
+        String image
 ) {
 }
