@@ -2,7 +2,9 @@ package com.pizzutti.precobom.infra;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +30,11 @@ public class ErrorHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity handle400(DataIntegrityViolationException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity handle401(InternalAuthenticationServiceException ex) {
+        return ResponseEntity.status(HttpStatusCode.valueOf(401)).body(ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
