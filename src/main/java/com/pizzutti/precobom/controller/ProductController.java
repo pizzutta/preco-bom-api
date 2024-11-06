@@ -1,7 +1,5 @@
 package com.pizzutti.precobom.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pizzutti.precobom.dto.IdDTO;
 import com.pizzutti.precobom.dto.ProductRegisterDTO;
 import com.pizzutti.precobom.dto.ProductUpdateDTO;
@@ -19,18 +17,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/product")
@@ -51,22 +43,10 @@ public class ProductController {
             @ApiResponse(responseCode = "204", description = "No products were found", content = @Content),
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content)
     })
+    //TODO: implement filtering and sorting on getAll endpoints
     public ResponseEntity<List<Product>> getAll() {
         List<Product> products = service.findAll();
         return (products.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(products);
-    }
-
-    @GetMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Product>> getSorted(@RequestParam(name = "order") String json) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, String> map = mapper.readValue(json, Map.class);
-            Order order = new Order(Direction.valueOf(map.get("direction")), map.get("property"));
-            List<Product> products = service.findAll(Sort.by(order));
-            return (products.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(products);
-        } catch (JsonProcessingException e) {
-            return ResponseEntity.badRequest().build();
-        }
     }
 
     @GetMapping("/{id}")
@@ -77,7 +57,8 @@ public class ProductController {
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
             @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
     })
-    public ResponseEntity<Product> getById(@Parameter(description = "The product ID", example = "1") @PathVariable(value = "id") Long id) {
+    public ResponseEntity<Product> getById(@Parameter(description = "The product ID", example = "1") @PathVariable(value =
+            "id") Long id) {
         Optional<Product> product = service.findById(id);
         return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
