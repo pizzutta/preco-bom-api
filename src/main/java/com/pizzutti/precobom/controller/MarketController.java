@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/market")
@@ -53,8 +54,23 @@ public class MarketController {
             @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
             @ApiResponse(responseCode = "404", description = "Market not found", content = @Content)
     })
-    public ResponseEntity<Market> getById(@Parameter(description = "The market ID", example = "1") @PathVariable(value = "id") Long id) {
+    public ResponseEntity<Market> getById(@Parameter(description = "The market ID", example = "1")
+                                          @PathVariable(value = "id") Long id) {
         Optional<Market> market = service.findById(id);
+        return market.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/uuid/{uuid}")
+    @Operation(description = "Gets a market by its UUID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Market found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Market.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Market not found", content = @Content)
+    })
+    public ResponseEntity<Market> getByUUID(@Parameter(description = "The market UUID",
+            example = "550e8400-e29b-41d4-a716-446655440000") @PathVariable(value = "uuid") UUID uuid) {
+        Optional<Market> market = service.findByUUID(uuid);
         return market.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
