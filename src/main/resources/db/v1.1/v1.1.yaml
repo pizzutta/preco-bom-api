@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db/v1.1/addColumnUUID_tbGroceryList.yaml
+  - include:
+      file: db/v1.1/addColumnUUID_tbItemList.yaml
+  - include:
+      file: db/v1.1/addColumnUUID_tbMarket.yaml
+  - include:
+      file: db/v1.1/addColumnUUID_tbProduct.yaml
+  - include:
+      file: db/v1.1/addColumnUUID_tbUser.yaml
