@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class GroceryListService {
@@ -17,6 +18,10 @@ public class GroceryListService {
 
     public Optional<GroceryList> findById(Long id) {
         return repository.findById(id);
+    }
+
+    public Optional<GroceryList> findByUUID(UUID uuid) {
+        return repository.findByUuid(uuid);
     }
 
     public List<GroceryList> findByUserId(Long userId) {

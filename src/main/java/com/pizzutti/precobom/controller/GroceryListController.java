@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/grocery-list")
@@ -46,6 +47,21 @@ public class GroceryListController {
     public ResponseEntity<GroceryList> getById(@Parameter(description = "The grocery list ID", example = "1") @PathVariable(value = "id"
     ) Long id) {
         Optional<GroceryList> groceryList = service.findById(id);
+        return groceryList.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/uuid/{uuid}")
+    @Operation(description = "Gets a grocery list by its UUID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Grocery list found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GroceryList.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Grocery list not found", content = @Content)
+    })
+    public ResponseEntity<GroceryList> getByUUID(@Parameter(description = "The grocery list UUID",
+            example = "550e8400-e29b-41d4-a716-446655440000") @PathVariable(value = "uuid") UUID uuid) {
+        Optional<GroceryList> groceryList = service.findByUUID(uuid);
         return groceryList.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
