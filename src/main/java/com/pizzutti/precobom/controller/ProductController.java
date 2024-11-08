@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/product")
@@ -60,6 +61,20 @@ public class ProductController {
     public ResponseEntity<Product> getById(@Parameter(description = "The product ID", example = "1") @PathVariable(value =
             "id") Long id) {
         Optional<Product> product = service.findById(id);
+        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/uuid/{uuid}")
+    @Operation(description = "Gets a product by its UUID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Product.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthenticated/unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
+    })
+    public ResponseEntity<Product> getByUUID(@Parameter(description = "The product UUID",
+            example = "550e8400-e29b-41d4-a716-446655440000") @PathVariable(value = "uuid") UUID uuid) {
+        Optional<Product> product = service.findByUUID(uuid);
         return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

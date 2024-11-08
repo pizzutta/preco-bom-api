@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -20,6 +21,9 @@ public class ProductService {
         return repository.findById(id);
     }
 
+    public Optional<Product> findByUUID(UUID uuid) {
+        return repository.findByUuid(uuid);
+    }
 
     public List<Product> findByMarketId(Long marketId) {
         return repository.findByMarketId(marketId);
