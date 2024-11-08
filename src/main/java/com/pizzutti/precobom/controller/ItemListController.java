@@ -44,12 +44,13 @@ public class ItemListController {
     })
     public ResponseEntity<ItemList> save(@RequestBody @Valid ItemListRegisterDTO data) {
         ItemList itemList = new ItemList();
-        itemList.setProduct(productService.findById(data.productId()).get());
+        itemList.setProduct(productService.findById(data.productId()).orElseThrow(EntityNotFoundException::new));
         itemList.setQuantity(data.quantity());
         itemList.setChecked(data.checked());
         service.save(itemList);
 
-        GroceryList groceryList = groceryListService.findById(data.groceryListId()).get();
+        GroceryList groceryList =
+                groceryListService.findById(data.groceryListId()).orElseThrow(EntityNotFoundException::new);
         groceryList.getItems().add(itemList);
         groceryListService.save(groceryList);
 
