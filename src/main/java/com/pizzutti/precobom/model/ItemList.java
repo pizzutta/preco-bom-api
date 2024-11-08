@@ -2,6 +2,9 @@ package com.pizzutti.precobom.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.UUID;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -13,6 +16,9 @@ public class ItemList {
     @GeneratedValue(strategy = IDENTITY)
     @Schema(description = "The item list ID", example = "1")
     private Long id;
+    @UuidGenerator
+    @Schema(description = "The item list UUID", example = "550e8400-e29b-41d4-a716-446655440000")
+    private UUID uuid;
     @ManyToOne
     @JoinColumn(name = "product_id")
     @Schema(description = "The product that is contained in the grocery list")
@@ -30,6 +36,14 @@ public class ItemList {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public Product getProduct() {

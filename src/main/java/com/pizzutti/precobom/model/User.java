@@ -3,13 +3,17 @@ package com.pizzutti.precobom.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
+import static com.pizzutti.precobom.model.UserRole.ADMIN;
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity(name = "tb_user")
@@ -20,6 +24,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = IDENTITY)
     @Schema(description = "The user ID", example = "1")
     private Long id;
+    @UuidGenerator
+    @Schema(description = "The user UUID", example = "550e8400-e29b-41d4-a716-446655440000")
+    private UUID uuid;
     @Column
     @Schema(description = "The user's email", example = "my@email.com")
     private String email;
@@ -27,7 +34,7 @@ public class User implements UserDetails {
     @JsonIgnore
     @Schema(hidden = true)
     private String password;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     @Schema(description = "The user's role in the app", example = "ADMIN")
     private UserRole role;
 
@@ -37,6 +44,14 @@ public class User implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public String getEmail() {
@@ -68,7 +83,7 @@ public class User implements UserDetails {
     @JsonIgnore
     @Schema(hidden = true)
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (this.role == UserRole.ADMIN) ? List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+        return (this.role == ADMIN) ? List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
                 new SimpleGrantedAuthority("ROLE_USER"))
                 : List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }

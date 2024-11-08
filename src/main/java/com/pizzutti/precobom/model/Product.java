@@ -3,6 +3,9 @@ package com.pizzutti.precobom.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.UUID;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -14,6 +17,9 @@ public class Product {
     @GeneratedValue(strategy = IDENTITY)
     @Schema(description = "The product ID", example = "1")
     private Long id;
+    @UuidGenerator
+    @Schema(description = "The product UUID", example = "550e8400-e29b-41d4-a716-446655440000")
+    private UUID uuid;
     @Column
     @Schema(description = "The product's name", example = "Grape Tomatoes")
     private String name;
@@ -39,6 +45,14 @@ public class Product {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public String getName() {
