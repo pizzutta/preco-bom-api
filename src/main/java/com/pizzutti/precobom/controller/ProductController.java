@@ -107,7 +107,7 @@ public class ProductController {
         product.setPrice(data.price());
         product.setMeasuringUnit(data.measuringUnit());
         product.setImage(data.image());
-        product.setMarket(marketService.findById(data.marketId()).get());
+        product.setMarket(marketService.findById(data.marketId()).orElseThrow(EntityNotFoundException::new));
 
         service.save(product);
 
