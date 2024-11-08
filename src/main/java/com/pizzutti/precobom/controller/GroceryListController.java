@@ -75,7 +75,7 @@ public class GroceryListController {
     public ResponseEntity<GroceryList> save(@RequestBody @Valid GroceryListRegisterDTO data) {
         GroceryList groceryList = new GroceryList();
         groceryList.setName(data.name());
-        groceryList.setUser(userService.findById(data.userId()).get());
+        groceryList.setUser(userService.findById(data.userId()).orElseThrow(EntityNotFoundException::new));
 
         service.save(groceryList);
 
